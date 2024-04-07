@@ -69,93 +69,95 @@ async function generateFace(fileName) {
 
 
   const hairColors = [
-    "rgb(0, 0, 0)", // Black
-    "rgb(44, 34, 43)", // Dark Brown
-    "rgb(80, 68, 68)", // Medium Brown
-    "rgb(167, 133, 106)", // Light Brown
-    "rgb(220, 208, 186)", // Blond
-    "rgb(233, 236, 239)", // Platinum Blond
-    "rgb(165, 42, 42)", // Red
-    "rgb(145, 85, 61)", // Auburn
-    "rgb(128, 128, 128)", // Grey
-    "rgb(185, 55, 55)", // Fire
-    "rgb(255, 192, 203)", // Pastel Pink
-    "rgb(255, 105, 180)", // Bright Pink
-    "rgb(230, 230, 250)", // Lavender
-    "rgb(64, 224, 208)", // Turquoise
-    "rgb(0, 191, 255)", // Bright Blue
-    "rgb(148, 0, 211)", // Deep Purple
-    "rgb(50, 205, 50)", // Lime Green
-    "rgb(255, 165, 0)", // Vivid Orange
-    "rgb(220, 20, 60)", // Crimson Red
-    "rgb(192, 192, 192)", // Silver
-    "rgb(255, 215, 0)", // Golden Yellow
-    "rgb(173, 216, 230)", // Light Blue
-    "rgb(255, 20, 147)", // Deep Pink
-    "rgb(123, 104, 238)", // Medium Slate Blue
-    "rgb(144, 238, 144)", // Light Green
-    "rgb(255, 127, 80)", // Coral
-    "rgb(135, 206, 235)", // Sky Blue
-    "rgb(255, 105, 180)", // Hot Pink
-    "rgb(255, 99, 71)", // Tomato
-    "rgb(154, 205, 50)", // Yellow Green
+    { name: "Black", rgb: "rgb(0, 0, 0)" },
+    { name: "Dark Brown", rgb: "rgb(44, 34, 43)" },
+    { name: "Medium Brown", rgb: "rgb(80, 68, 68)" },
+    { name: "Light Brown", rgb: "rgb(167, 133, 106)" },
+    { name: "Blond", rgb: "rgb(220, 208, 186)" },
+    { name: "Platinum Blond", rgb: "rgb(233, 236, 239)" },
+    { name: "Red", rgb: "rgb(165, 42, 42)" },
+    { name: "Auburn", rgb: "rgb(145, 85, 61)" },
+    { name: "Grey", rgb: "rgb(128, 128, 128)" },
+    { name: "Fire", rgb: "rgb(185, 55, 55)" },
+    { name: "Pastel Pink", rgb: "rgb(255, 192, 203)" },
+    { name: "Bright Pink", rgb: "rgb(255, 105, 180)" },
+    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
+    { name: "Turquoise", rgb: "rgb(64, 224, 208)" },
+    { name: "Bright Blue", rgb: "rgb(0, 191, 255)" },
+    { name: "Deep Purple", rgb: "rgb(148, 0, 211)" },
+    { name: "Lime Green", rgb: "rgb(50, 205, 50)" },
+    { name: "Vivid Orange", rgb: "rgb(255, 165, 0)" },
+    { name: "Crimson Red", rgb: "rgb(220, 20, 60)" },
+    { name: "Silver", rgb: "rgb(192, 192, 192)" },
+    { name: "Golden Yellow", rgb: "rgb(255, 215, 0)" },
+    { name: "Light Blue", rgb: "rgb(173, 216, 230)" },
+    { name: "Deep Pink", rgb: "rgb(255, 20, 147)" },
+    { name: "Medium Slate Blue", rgb: "rgb(123, 104, 238)" },
+    { name: "Light Green", rgb: "rgb(144, 238, 144)" },
+    { name: "Coral", rgb: "rgb(255, 127, 80)" },
+    { name: "Sky Blue", rgb: "rgb(135, 206, 235)" },
+    { name: "Tomato", rgb: "rgb(255, 99, 71)" },
+    { name: "Yellow Green", rgb: "rgb(154, 205, 50)" }
   ];
+  
 
-  const backgroundColors = [
-    "rgb(245, 245, 220)", // Soft Beige
-    "rgb(176, 224, 230)", // Pale Blue
-    "rgb(211, 211, 211)", // Light Grey
-    "rgb(152, 251, 152)", // Pastel Green
-    "rgb(255, 253, 208)", // Cream
-    "rgb(230, 230, 250)", // Muted Lavender
-    "rgb(188, 143, 143)", // Dusty Rose
-    "rgb(135, 206, 235)", // Sky Blue
-    "rgb(245, 255, 250)", // Mint Cream
-    "rgb(245, 222, 179)", // Wheat
-    "rgb(47, 79, 79)", // Dark Slate Gray
-    "rgb(72, 61, 139)", // Dark Slate Blue
-    "rgb(60, 20, 20)", // Dark Brown
-    "rgb(25, 25, 112)", // Midnight Blue
-    "rgb(139, 0, 0)", // Dark Red
-    "rgb(85, 107, 47)", // Olive Drab
-    "rgb(128, 0, 128)", // Purple
-    "rgb(0, 100, 0)", // Dark Green
-    "rgb(0, 0, 139)", // Dark Blue
-    "rgb(105, 105, 105)", // Dim Gray
-    "rgb(255, 240, 245)", // Linen
-    "rgb(250, 235, 215)", // Antique White
-    "rgb(240, 248, 255)", // Alice Blue
-    "rgb(255, 228, 196)", // Bisque
-    "rgb(255, 245, 238)", // Seashell
-    "rgb(245, 245, 220)", // Beige
-    "rgb(250, 250, 210)", // Light Goldenrod Yellow
-    "rgb(255, 255, 240)", // Ivory
-    "rgb(255, 250, 240)", // Floral White
-    "rgb(245, 255, 250)", // Mint Cream
-  ];
 
   const faceColors = [
-    "rgb(255, 228, 181)", // Blush
-    "rgb(255, 218, 185)", // Tan
-    "rgb(255, 235, 205)", // Wheat
-    "rgb(255, 239, 213)", // Papaya Whip
-    "rgb(255, 222, 173)", // Navajo White
-    "rgb(255, 203, 164)", // Peach Puff
-    "rgb(255, 192, 203)", // Shades of Pink
-    "rgb(255, 160, 122)", // Light Salmon
-    "rgb(255, 127, 80)", // Coral
-    "rgb(255, 114, 86)", // Salmon
-    "rgb(255, 99, 71)", // Tomato
-    "rgb(255, 69, 0)", // Orange Red
-    "rgb(255, 20, 147)", // Deep Pink
-    "rgb(233, 150, 122)", // Desert Sand
-    "rgb(220, 20, 60)", // Crimson Red
-    "rgb(205, 92, 92)", // Indian Red
-    "rgb(178, 34, 34)", // Fire Brick
-    "rgb(165, 42, 42)", // Brown Red
-    "rgb(139, 69, 19)", // Saddle Brown
-    "rgb(107, 142, 35)" // Olive Drab
+    { name: "Blush", rgb: "rgb(255, 228, 181)" },
+    { name: "Tan", rgb: "rgb(255, 218, 185)" },
+    { name: "Wheat", rgb: "rgb(255, 235, 205)" },
+    { name: "Papaya Whip", rgb: "rgb(255, 239, 213)" },
+    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
+    { name: "Peach Puff", rgb: "rgb(255, 203, 164)" },
+    { name: "Light Pink", rgb: "rgb(255, 182, 193)" },
+    { name: "Light Coral", rgb: "rgb(240, 128, 128)" },
+    { name: "Sienna", rgb: "rgb(160, 82, 45)" },
+    { name: "Chocolate", rgb: "rgb(210, 105, 30)" },
+    { name: "Peru", rgb: "rgb(205, 133, 63)" },
+    { name: "Sandy Brown", rgb: "rgb(244, 164, 96)" },
+    { name: "Burly Wood", rgb: "rgb(222, 184, 135)" },
+    { name: "Tan", rgb: "rgb(210, 180, 140)" },
+    { name: "Rosy Brown", rgb: "rgb(188, 143, 143)" },
+    { name: "Moccasin", rgb: "rgb(255, 228, 181)" },
+    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
+    { name: "Peach Puff", rgb: "rgb(255, 218, 185)" },
+    { name: "Misty Rose", rgb: "rgb(255, 228, 225)" },
+    { name: "Lavender Blush", rgb: "rgb(255, 240, 245)" }
   ];
+  
+  const backgroundColors = [
+    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
+    { name: "Honeydew", rgb: "rgb(240, 255, 240)" },
+    { name: "Mint Cream", rgb: "rgb(245, 255, 250)" },
+    { name: "Azure", rgb: "rgb(240, 255, 255)" },
+    { name: "Alice Blue", rgb: "rgb(240, 248, 255)" },
+    { name: "Ghost White", rgb: "rgb(248, 248, 255)" },
+    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
+    { name: "Pale Turquoise", rgb: "rgb(175, 238, 238)" },
+    { name: "Aquamarine", rgb: "rgb(127, 255, 212)" },
+    { name: "Light Cyan", rgb: "rgb(224, 255, 255)" },
+    { name: "Lemon Chiffon", rgb: "rgb(255, 250, 205)" },
+    { name: "Light Goldenrod Yellow", rgb: "rgb(250, 250, 210)" },
+    { name: "Light Yellow", rgb: "rgb(255, 255, 224)" },
+    { name: "Cornsilk", rgb: "rgb(255, 248, 220)" },
+    { name: "Old Lace", rgb: "rgb(253, 245, 230)" },
+    { name: "Linen", rgb: "rgb(250, 240, 230)" },
+    { name: "Antique White", rgb: "rgb(250, 235, 215)" },
+    { name: "Papaya Whip", rgb: "rgb(255, 239, 213)" },
+    { name: "Blanched Almond", rgb: "rgb(255, 235, 205)" },
+    { name: "Bisque", rgb: "rgb(255, 228, 196)" },
+    { name: "Peach Puff", rgb: "rgb(255, 218, 185)" },
+    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
+    { name: "Moccasin", rgb: "rgb(255, 228, 181)" },
+    { name: "Gainsboro", rgb: "rgb(220, 220, 220)" },
+    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
+    { name: "Lavender Blush", rgb: "rgb(255, 240, 245)" },
+    { name: "Misty Rose", rgb: "rgb(255, 228, 225)" },
+    { name: "White Smoke", rgb: "rgb(245, 245, 245)" },
+    { name: "Beige", rgb: "rgb(245, 245, 220)" },
+  ];
+  
+
 
   const faceResults = faceShape.generateFaceCountourPoints();
   computedFacePoints.push(...faceResults.face);
@@ -245,7 +247,8 @@ async function generateFace(fileName) {
 
   if (Math.random().toFixed(3) > 0.1) {
     // use natural hair color
-    hairColor = hairColors[Math.floor(Math.random().toFixed(3) * 10)];
+    const hairColorsIndex=Math.floor(Math.random()* hairColors.length)
+    hairColor = hairColors[hairColorsIndex].rgb;
   } else {
     hairColor = "url(#rainbowGradient)";
     dyeColorOffset = randomFromInterval(0, 100) + "%";
@@ -316,6 +319,8 @@ async function generateFace(fileName) {
   }
   
   const noseMarkup = generateNoseMarkup();
+  const backgroundColorsIndex= Math.floor(Math.random()* backgroundColors.length)
+  const faceColorsIndex =Math.floor(Math.random() * faceColors.length)
 
   /////////////////////////////////////
 
@@ -338,8 +343,8 @@ async function generateFace(fileName) {
         <stop offset="100%" style="stop-color: ${hairColors[Math.floor(Math.random().toFixed(3) * hairColors.length)]}; stop-opacity: 1" />
       </linearGradient>
     </defs>
-    <rect x="-100" y="-100" width="100%" height="100%" fill="${backgroundColors[Math.floor(Math.random().toFixed(3) * backgroundColors.length)]}" />
-    <polyline id="faceContour" points="${computedFacePoints.join(' ')}" fill="${faceColors[Math.floor(Math.random().toFixed(3) * faceColors.length)]}" stroke="black" stroke-width="${3.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
+    <rect x="-100" y="-100" width="100%" height="100%" fill="${backgroundColors[backgroundColorsIndex].rgb}" />
+    <polyline id="faceContour" points="${computedFacePoints.join(' ')}" fill="${faceColors[faceColorsIndex].rgb}" stroke="black" stroke-width="${3.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
     <g transform="translate(${center[0] + distanceBetweenEyes + rightEyeOffsetX} ${-(-center[1] + eyeHeightOffset + rightEyeOffsetY)})">
       <polyline id="rightCountour" points="${eyeRightCountour.join(' ')}" fill="white" stroke="white" stroke-width="${0.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
     </g>
@@ -366,12 +371,9 @@ async function generateFace(fileName) {
   </svg>
   `;
 
-
-
-
   fileName = `${fileName}.svg`;
 
-  const filePath = path.join('./avatar2', fileName);
+  const filePath = path.join('./avatar', fileName);
   try {
     await writeFilePromise(filePath, svgString);
     console.log(`${fileName} has been created`);
@@ -381,36 +383,32 @@ async function generateFace(fileName) {
 
   matadata = `
   {
-    "name": "Mystical Forest",
-    "description": "A digital painting of a mystical forest at dusk, highlighting the ethereal beauty of nature.",
+    "name": "Ugly Avatar",
+    "description": "A Naïve and Ugly Avatar Collection",
     "image": "https://example.com/path/to/mystical_forest.jpg",
+    "external_url": "https://www.byd.quest",
     "attributes": [
       {
-        "trait_type": "Mood",
+        "trait_type": "Avatar Type",
         "value": "Ethereal"
       },
       {
-        "trait_type": "Time of Day",
+        "trait_type": "Face",
         "value": "Dusk"
       },
       {
-        "trait_type": "Color Palette",
+        "trait_type": "Hair",
+        "value": "Vibrant"
+      }
+      {
+        "trait_type": "Background",
         "value": "Vibrant"
       }
     ],
-    "creator": "Artist Name",
-    "edition": 1,
-    "date": "April 8, 2024",
-    "external_url": "https://example.com/path/to/artist/portfolio",
-    "license": "Creative Commons Attribution 4.0 International License"
   }  
   `
-
-
-
   // return svgString;
 }
-
 
 
 async function generateFaces(total, batchSize) {
@@ -427,7 +425,7 @@ async function generateFaces(total, batchSize) {
 }
 
 // Run the function with limited concurrency
-const totalFaces = 10000;
+const totalFaces = 1000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
