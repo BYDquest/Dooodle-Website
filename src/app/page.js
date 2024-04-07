@@ -15,7 +15,7 @@ export default function Home() {
     // Load more SVGs when reaching near the bottom of the page
     const loadMoreSVGs = () => {
       setLoadedSVGCount((prevCount) => {
-        const newCount = Math.min(prevCount + 16, 100); // Increase by 16, max out at 100
+        const newCount = Math.min(prevCount + 16, 1000); // Increase by 16, max out at 1000
         updateSvgFiles(newCount);
         return newCount;
       });
