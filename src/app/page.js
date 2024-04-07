@@ -61,7 +61,7 @@ export default function Home() {
               <div
                 className="absolute  inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white text-2xl"
               >
-                Life time ID: {index}
+                Lifetime ID: {index}
               </div>
             )}
           </div>
