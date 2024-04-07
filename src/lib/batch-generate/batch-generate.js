@@ -366,15 +366,45 @@ async function generateFace(fileName) {
   </svg>
   `;
 
+
+
+
   fileName = `${fileName}.svg`;
 
-  const filePath = path.join('./avatar', fileName);
+  const filePath = path.join('./avatar2', fileName);
   try {
     await writeFilePromise(filePath, svgString);
     console.log(`${fileName} has been created`);
   } catch (err) {
     console.error('Error writing file:', err);
   }
+
+  matadata = `
+  {
+    "name": "Mystical Forest",
+    "description": "A digital painting of a mystical forest at dusk, highlighting the ethereal beauty of nature.",
+    "image": "https://example.com/path/to/mystical_forest.jpg",
+    "attributes": [
+      {
+        "trait_type": "Mood",
+        "value": "Ethereal"
+      },
+      {
+        "trait_type": "Time of Day",
+        "value": "Dusk"
+      },
+      {
+        "trait_type": "Color Palette",
+        "value": "Vibrant"
+      }
+    ],
+    "creator": "Artist Name",
+    "edition": 1,
+    "date": "April 8, 2024",
+    "external_url": "https://example.com/path/to/artist/portfolio",
+    "license": "Creative Commons Attribution 4.0 International License"
+  }  
+  `
 
 
 
@@ -397,7 +427,7 @@ async function generateFaces(total, batchSize) {
 }
 
 // Run the function with limited concurrency
-const totalFaces = 1000;
+const totalFaces = 10000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
