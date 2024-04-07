@@ -67,96 +67,84 @@ async function generateFace(fileName) {
   let hairColor = "black";
   let dyeColorOffset = "50%";
 
-
+  const faceColors = [
+    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
+    { name: "Beige", rgb: "rgb(245, 245, 220)" },
+    { name: "Wheat", rgb: "rgb(245, 222, 179)" },
+    { name: "Tan", rgb: "rgb(210, 180, 140)" },
+    { name: "Almond", rgb: "rgb(255, 235, 205)" },
+    { name: "Peach", rgb: "rgb(255, 218, 185)" },
+    { name: "Apricot", rgb: "rgb(251, 206, 177)" },
+    { name: "Golden", rgb: "rgb(255, 215, 0)" },
+    { name: "Olive", rgb: "rgb(128, 128, 0)" },
+    { name: "Sienna", rgb: "rgb(160, 82, 45)" },
+    { name: "Chestnut", rgb: "rgb(205, 92, 92)" },
+    { name: "Chocolate", rgb: "rgb(210, 105, 30)" },
+    { name: "Bronze", rgb: "rgb(205, 127, 50)" },
+    { name: "Mahogany", rgb: "rgb(192, 64, 0)" },
+    { name: "Coral", rgb: "rgb(255, 127, 80)" },
+    { name: "Terracotta", rgb: "rgb(226, 114, 91)" },
+    { name: "Crimson", rgb: "rgb(220, 20, 60)" },
+    { name: "Magenta", rgb: "rgb(255, 0, 255)" },
+    { name: "Lilac", rgb: "rgb(200, 162, 200)" },
+    { name: "Plum", rgb: "rgb(221, 160, 221)" }
+  ];
+  
+  const backgroundColors = [
+    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
+    { name: "Beige", rgb: "rgb(245, 245, 220)" },
+    { name: "Cream", rgb: "rgb(255, 253, 208)" },
+    { name: "Linen", rgb: "rgb(250, 240, 230)" },
+    { name: "Vanilla", rgb: "rgb(243, 229, 171)" },
+    { name: "Soft Yellow", rgb: "rgb(255, 255, 224)" },
+    { name: "Pale Green", rgb: "rgb(152, 251, 152)" },
+    { name: "Mint", rgb: "rgb(245, 255, 250)" },
+    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
+    { name: "Periwinkle", rgb: "rgb(204, 204, 255)" },
+    { name: "Powder Blue", rgb: "rgb(176, 224, 230)" },
+    { name: "Light Coral", rgb: "rgb(240, 128, 128)" },
+    { name: "Soft Pink", rgb: "rgb(255, 228, 225)" },
+    { name: "Mauve", rgb: "rgb(224, 176, 255)" },
+    { name: "Taupe", rgb: "rgb(188, 143, 143)" },
+    { name: "Khaki", rgb: "rgb(195, 176, 145)" },
+    { name: "Sepia", rgb: "rgb(112, 66, 20)" },
+    { name: "Olive Green", rgb: "rgb(85, 107, 47)" },
+    { name: "Steel Blue", rgb: "rgb(70, 130, 180)" },
+    { name: "Charcoal", rgb: "rgb(54, 69, 79)" }
+  ];
+  
   const hairColors = [
     { name: "Black", rgb: "rgb(0, 0, 0)" },
     { name: "Dark Brown", rgb: "rgb(44, 34, 43)" },
     { name: "Medium Brown", rgb: "rgb(80, 68, 68)" },
     { name: "Light Brown", rgb: "rgb(167, 133, 106)" },
-    { name: "Blond", rgb: "rgb(220, 208, 186)" },
+    { name: "Honey Blond", rgb: "rgb(220, 208, 186)" },
+    { name: "Golden Blond", rgb: "rgb(255, 236, 139)" },
     { name: "Platinum Blond", rgb: "rgb(233, 236, 239)" },
-    { name: "Red", rgb: "rgb(165, 42, 42)" },
+    { name: "Ash Blond", rgb: "rgb(216, 216, 216)" },
+    { name: "Ginger", rgb: "rgb(178, 93, 37)" },
     { name: "Auburn", rgb: "rgb(145, 85, 61)" },
-    { name: "Grey", rgb: "rgb(128, 128, 128)" },
-    { name: "Fire", rgb: "rgb(185, 55, 55)" },
-    { name: "Pastel Pink", rgb: "rgb(255, 192, 203)" },
-    { name: "Bright Pink", rgb: "rgb(255, 105, 180)" },
-    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
-    { name: "Turquoise", rgb: "rgb(64, 224, 208)" },
-    { name: "Bright Blue", rgb: "rgb(0, 191, 255)" },
-    { name: "Deep Purple", rgb: "rgb(148, 0, 211)" },
-    { name: "Lime Green", rgb: "rgb(50, 205, 50)" },
-    { name: "Vivid Orange", rgb: "rgb(255, 165, 0)" },
-    { name: "Crimson Red", rgb: "rgb(220, 20, 60)" },
+    { name: "Burgundy", rgb: "rgb(128, 0, 32)" },
+    { name: "Chestnut", rgb: "rgb(149, 69, 53)" },
+    { name: "Copper", rgb: "rgb(184, 115, 51)" },
+    { name: "Mahogany", rgb: "rgb(192, 64, 0)" },
+    { name: "Jet Black", rgb: "rgb(10, 10, 10)" },
     { name: "Silver", rgb: "rgb(192, 192, 192)" },
-    { name: "Golden Yellow", rgb: "rgb(255, 215, 0)" },
-    { name: "Light Blue", rgb: "rgb(173, 216, 230)" },
-    { name: "Deep Pink", rgb: "rgb(255, 20, 147)" },
-    { name: "Medium Slate Blue", rgb: "rgb(123, 104, 238)" },
-    { name: "Light Green", rgb: "rgb(144, 238, 144)" },
-    { name: "Coral", rgb: "rgb(255, 127, 80)" },
-    { name: "Sky Blue", rgb: "rgb(135, 206, 235)" },
-    { name: "Tomato", rgb: "rgb(255, 99, 71)" },
-    { name: "Yellow Green", rgb: "rgb(154, 205, 50)" }
-  ];
-  
-
-
-  const faceColors = [
-    { name: "Blush", rgb: "rgb(255, 228, 181)" },
-    { name: "Tan", rgb: "rgb(255, 218, 185)" },
-    { name: "Wheat", rgb: "rgb(255, 235, 205)" },
-    { name: "Papaya Whip", rgb: "rgb(255, 239, 213)" },
-    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
-    { name: "Peach Puff", rgb: "rgb(255, 203, 164)" },
-    { name: "Light Pink", rgb: "rgb(255, 182, 193)" },
-    { name: "Light Coral", rgb: "rgb(240, 128, 128)" },
-    { name: "Sienna", rgb: "rgb(160, 82, 45)" },
-    { name: "Chocolate", rgb: "rgb(210, 105, 30)" },
-    { name: "Peru", rgb: "rgb(205, 133, 63)" },
-    { name: "Sandy Brown", rgb: "rgb(244, 164, 96)" },
-    { name: "Burly Wood", rgb: "rgb(222, 184, 135)" },
-    { name: "Tan", rgb: "rgb(210, 180, 140)" },
-    { name: "Rosy Brown", rgb: "rgb(188, 143, 143)" },
-    { name: "Moccasin", rgb: "rgb(255, 228, 181)" },
-    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
-    { name: "Peach Puff", rgb: "rgb(255, 218, 185)" },
-    { name: "Misty Rose", rgb: "rgb(255, 228, 225)" },
-    { name: "Lavender Blush", rgb: "rgb(255, 240, 245)" }
-  ];
-  
-  const backgroundColors = [
-    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
-    { name: "Honeydew", rgb: "rgb(240, 255, 240)" },
-    { name: "Mint Cream", rgb: "rgb(245, 255, 250)" },
-    { name: "Azure", rgb: "rgb(240, 255, 255)" },
-    { name: "Alice Blue", rgb: "rgb(240, 248, 255)" },
-    { name: "Ghost White", rgb: "rgb(248, 248, 255)" },
+    { name: "Slate Gray", rgb: "rgb(112, 128, 144)" },
+    { name: "Steel Blue", rgb: "rgb(70, 130, 180)" },
+    { name: "Periwinkle", rgb: "rgb(204, 204, 255)" },
     { name: "Lavender", rgb: "rgb(230, 230, 250)" },
-    { name: "Pale Turquoise", rgb: "rgb(175, 238, 238)" },
-    { name: "Aquamarine", rgb: "rgb(127, 255, 212)" },
-    { name: "Light Cyan", rgb: "rgb(224, 255, 255)" },
-    { name: "Lemon Chiffon", rgb: "rgb(255, 250, 205)" },
-    { name: "Light Goldenrod Yellow", rgb: "rgb(250, 250, 210)" },
-    { name: "Light Yellow", rgb: "rgb(255, 255, 224)" },
-    { name: "Cornsilk", rgb: "rgb(255, 248, 220)" },
-    { name: "Old Lace", rgb: "rgb(253, 245, 230)" },
-    { name: "Linen", rgb: "rgb(250, 240, 230)" },
-    { name: "Antique White", rgb: "rgb(250, 235, 215)" },
-    { name: "Papaya Whip", rgb: "rgb(255, 239, 213)" },
-    { name: "Blanched Almond", rgb: "rgb(255, 235, 205)" },
-    { name: "Bisque", rgb: "rgb(255, 228, 196)" },
-    { name: "Peach Puff", rgb: "rgb(255, 218, 185)" },
-    { name: "Navajo White", rgb: "rgb(255, 222, 173)" },
-    { name: "Moccasin", rgb: "rgb(255, 228, 181)" },
-    { name: "Gainsboro", rgb: "rgb(220, 220, 220)" },
-    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
-    { name: "Lavender Blush", rgb: "rgb(255, 240, 245)" },
-    { name: "Misty Rose", rgb: "rgb(255, 228, 225)" },
-    { name: "White Smoke", rgb: "rgb(245, 245, 245)" },
-    { name: "Beige", rgb: "rgb(245, 245, 220)" },
+    { name: "Plum", rgb: "rgb(221, 160, 221)" },
+    { name: "Indigo", rgb: "rgb(75, 0, 130)" },
+    { name: "Forest Green", rgb: "rgb(34, 139, 34)" },
+    { name: "Olive Green", rgb: "rgb(85, 107, 47)" },
+    { name: "Lime Green", rgb: "rgb(50, 205, 50)" },
+    { name: "Coral", rgb: "rgb(255, 127, 80)" },
+    { name: "Peach", rgb: "rgb(255, 218, 185)" },
+    { name: "Crimson", rgb: "rgb(220, 20, 60)" },
+    { name: "Magenta", rgb: "rgb(255, 0, 255)" },
+    { name: "Turquoise", rgb: "rgb(64, 224, 208)" }
   ];
-  
 
 
   const faceResults = faceShape.generateFaceCountourPoints();
@@ -373,7 +361,7 @@ async function generateFace(fileName) {
 
   fileName = `${fileName}.svg`;
 
-  const filePath = path.join('./avatar', fileName);
+  const filePath = path.join('./avatar2', fileName);
   try {
     await writeFilePromise(filePath, svgString);
     console.log(`${fileName} has been created`);
