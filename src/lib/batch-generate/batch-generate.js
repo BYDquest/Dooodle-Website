@@ -397,7 +397,7 @@ async function generateFaces(total, batchSize) {
 }
 
 // Run the function with limited concurrency
-const totalFaces = 10000;
+const totalFaces = 1000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
