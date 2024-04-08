@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 export default function Home() {
   const [svgFiles, setSvgFiles] = useState([]);
-  const [loadedSVGCount, setLoadedSVGCount] = useState(16); // Start with 16 SVGs
+  const [loadedSVGCount, setLoadedSVGCount] = useState(32); // Start with 16 SVGs
   const [hoverIndex, setHoverIndex] = useState(null); // Track hover state
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-0">
         {svgFiles.map((file, index) => (
           <div
             key={index}
