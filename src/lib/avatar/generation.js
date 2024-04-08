@@ -9,6 +9,12 @@ const eyeShape = require("./eye_shape.js");
 const hairLines = require("./hair_lines.js");
 const mouthShape = require("./mouth_shape.js");
 
+function ensureDirectoryExists(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
+  }
+}
+
 
 function randomFromInterval(min, max) {
   // min and max included
@@ -397,14 +403,12 @@ async function generateFace(fileName) {
     console.error('Error writing file:', err);
   }
 
-
   // return svgString;
 }
 
 
 async function generateFaces(total, batchSize) {
   let batchStart = 0;
-
   while (batchStart < total) {
     const promises = [];
     for (let i = batchStart; i < Math.min(batchStart + batchSize, total); i++) {
@@ -415,9 +419,15 @@ async function generateFaces(total, batchSize) {
   }
 }
 
+
+
+ensureDirectoryExists('avatar')
+ensureDirectoryExists('metadata')
+
 // Run the function with limited concurrency
-const totalFaces = 100;
+const totalFaces = 150;
 const batchSize = 200; // Adjust based on your system's capabilities
+
 
 generateFaces(totalFaces, batchSize).then(() => {
   console.log('All files have been generated and saved.');

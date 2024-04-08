@@ -5,6 +5,10 @@ const sharp = require('sharp');
 const svgDirectory = path.join(__dirname, 'avatar');
 const outputDirectory = path.join(__dirname, 'avatar-png');
 
+if (!fs.existsSync(outputDirectory)) {
+  fs.mkdirSync(outputDirectory, { recursive: true });
+}
+
 // Adjust based on your system's capabilities
 const CONCURRENCY_LIMIT = 200;
 
