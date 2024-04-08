@@ -176,9 +176,50 @@ function getEggShapePoints(a, b, k, segment_points) {
 }
 
 
+function generateMouthShape3( faceCountour,faceHeight, faceWidth ) {
+
+  const style = 'neutral'
+  // Constants to adjust the shape and size based on style
+  const styleAdjustments = {
+      smiling: {widthFactor: 1/6, heightFactor: 1/20, curveIntensity: 0.005},
+      frowning: {widthFactor: 1/6, heightFactor: 1/20, curveIntensity: -0.005},
+      neutral: {widthFactor: 1/10, heightFactor: 1/30, curveIntensity: 0.001}
+  };
+
+  // Calculate dimensions based on face size and style
+  const {widthFactor, heightFactor, curveIntensity} = styleAdjustments[style];
+  const mouthWidth = faceWidth * widthFactor;
+  const mouthHeight = faceHeight * heightFactor;
+
+  // Generate a base line for the mouth
+  let mouthPoints = [];
+  for (let i = -mouthWidth / 2; i <= mouthWidth / 2; i += mouthWidth / 50) {
+      const x = i;
+      const y = Math.sin(i * curveIntensity) * mouthHeight;
+      mouthPoints.push([x, y]);
+  }
+
+  // Apply a random centering within a realistic range on the face
+  const center = [
+      randomFromInterval(-faceWidth / 8, faceWidth / 8),
+      randomFromInterval(faceHeight / 4, faceHeight / 2.5)
+  ];
+
+  // Adjust points for the center
+  mouthPoints = mouthPoints.map(point => [
+      point[0] + center[0],
+      point[1] + center[1]
+  ]);
+
+  return mouthPoints;
+}
+
+
+
+
 module.exports = {
   getEggShapePoints,
   generateMouthShape0,
   generateMouthShape1,
-  generateMouthShape2
+  generateMouthShape2,
 };

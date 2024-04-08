@@ -271,7 +271,7 @@ async function generateFace(fileName) {
     dyeColorOffset = randomFromInterval(0, 100) + "%";
   }
 
-  const choice = Math.floor(Math.random().toFixed(3) * 3);
+  const choice = Math.floor(Math.random()* 3);
   if (choice === 0) {
     mouthPoints.push(...mouthShape.generateMouthShape0(computedFacePoints, faceHeight, faceWidth));
   } else if (choice === 1) {
@@ -449,7 +449,7 @@ ensureDirectoryExists('avatar')
 ensureDirectoryExists('metadata')
 
 // Run the function with limited concurrency
-const totalFaces = 10000;
+const totalFaces = 100;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
