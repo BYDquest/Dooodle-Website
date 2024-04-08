@@ -23,14 +23,14 @@ function convertArrayToFixedFloat(arr) {
 
 
 function convertHairsArrayToFixedFloat(arr) {
- // Map each sub-array in the array
- return arr.map(subArr => 
-  // For each sub-array, map each coordinate pair
-  subArr.map(([x, y]) => 
-    // Convert each x and y in the pair to fixed float
-    [parseFloat(x.toFixed(2)), parseFloat(y.toFixed(2))]
-  )
-);
+  // Map each sub-array in the array
+  return arr.map(subArr =>
+    // For each sub-array, map each coordinate pair
+    subArr.map(([x, y]) =>
+      // Convert each x and y in the pair to fixed float
+      [parseFloat(x.toFixed(2)), parseFloat(y.toFixed(2))]
+    )
+  );
 }
 
 async function generateFace(fileName) {
@@ -89,7 +89,7 @@ async function generateFace(fileName) {
     { name: "Lilac", rgb: "rgb(200, 162, 200)" },
     { name: "Plum", rgb: "rgb(221, 160, 221)" }
   ];
-  
+
   const backgroundColors = [
     { name: "Ivory", rgb: "rgb(255, 255, 240)" },
     { name: "Beige", rgb: "rgb(245, 245, 220)" },
@@ -112,7 +112,7 @@ async function generateFace(fileName) {
     { name: "Steel Blue", rgb: "rgb(70, 130, 180)" },
     { name: "Charcoal", rgb: "rgb(54, 69, 79)" }
   ];
-  
+
   const hairColors = [
     { name: "Black", rgb: "rgb(0, 0, 0)" },
     { name: "Dark Brown", rgb: "rgb(44, 34, 43)" },
@@ -211,19 +211,19 @@ async function generateFace(fileName) {
     numHairLines.push(Math.floor(randomFromInterval(0, 50)));
   }
 
-  if (Math.random().toFixed(3) > 0.3) {
+  if (Math.random() > 0.3) {
     hairs.push(...hairLines.generateHairLines0(computedFacePoints, numHairLines[0] * 1 + 10));
 
   }
-  if (Math.random().toFixed(3) > 0.3) {
+  if (Math.random() > 0.3) {
     hairs.push(...hairLines.generateHairLines1(computedFacePoints, numHairLines[1] / 1.5 + 10));
 
   }
-  if (Math.random().toFixed(3) > 0.5) {
+  if (Math.random() > 0.5) {
     hairs.push(...hairLines.generateHairLines2(computedFacePoints, numHairLines[2] * 3 + 10));
 
   }
-  if (Math.random().toFixed(3) > 0.5) {
+  if (Math.random() > 0.5) {
     hairs.push(...hairLines.generateHairLines3(computedFacePoints, numHairLines[3] * 3 + 10));
 
   }
@@ -233,9 +233,10 @@ async function generateFace(fileName) {
   leftNoseCenterX = randomFromInterval(-faceWidth / 18, -faceWidth / 12);
   leftNoseCenterY = rightNoseCenterY + randomFromInterval(-faceHeight / 30, faceHeight / 20);
 
-  if (Math.random().toFixed(3) > 0.1) {
+
+  if (Math.random() > 0.1) {
     // use natural hair color
-    const hairColorsIndex=Math.floor(Math.random()* hairColors.length)
+    const hairColorsIndex = Math.floor(Math.random() * hairColors.length)
     hairColor = hairColors[hairColorsIndex].rgb;
   } else {
     hairColor = "url(#rainbowGradient)";
@@ -283,7 +284,7 @@ async function generateFace(fileName) {
 
 
   function generateNoseMarkup() {
-    if (Math.random().toFixed(3) > 0.5) {
+    if (Math.random() > 0.5) {
       let rightNose = [];
       let leftNose = [];
       for (let i = 0; i < 10; i++) {
@@ -305,15 +306,14 @@ async function generateFace(fileName) {
       `;
     }
   }
-  
+
   const noseMarkup = generateNoseMarkup();
-  const backgroundColorsIndex= Math.floor(Math.random()* backgroundColors.length)
-  const faceColorsIndex =Math.floor(Math.random() * faceColors.length)
+  const backgroundColorsIndex = Math.floor(Math.random() * backgroundColors.length)
+  const faceColorsIndex = Math.floor(Math.random() * faceColors.length)
 
   /////////////////////////////////////
 
-  let svgString = `
-  <svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" width="500" height="500" id="face-svg">
+  let svgString = `<svg viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" width="500" height="500" id="face-svg">
     <defs>
       <clipPath id="leftEyeClipPath">
         <polyline points="${eyeLeftCountour.join(' ')}" />
@@ -356,33 +356,22 @@ async function generateFace(fileName) {
     <g id="mouth">
       <polyline points="${mouthPoints.join(' ')}" fill="rgb(215,127,140)" stroke="black" stroke-width="3" stroke-linejoin="round" filter="url(#fuzzy)" />
     </g>
-  </svg>
-  `;
+  </svg>`;
 
-  fileName = `${fileName}.svg`;
 
-  const filePath = path.join('./avatar', fileName);
-  try {
-    await writeFilePromise(filePath, svgString);
-    console.log(`${fileName} has been created`);
-  } catch (err) {
-    console.error('Error writing file:', err);
-  }
-
-  matadata = `
-  {
+  matadata = `{
     "name": "Ugly Avatar",
     "description": "A Naïve and Ugly Avatar Collection",
-    "image": "https://example.com/path/to/mystical_forest.jpg",
+    "image": "https://example.com/path/to/${fileName}.svg",
     "external_url": "https://www.byd.quest",
     "attributes": [
       {
         "trait_type": "Avatar Type",
-        "value": "Ethereal"
+        "value": "${svgString.length}"
       },
       {
         "trait_type": "Face",
-        "value": "Dusk"
+        "value": "${faceColors[faceColorsIndex].name}"
       },
       {
         "trait_type": "Hair",
@@ -390,18 +379,32 @@ async function generateFace(fileName) {
       }
       {
         "trait_type": "Background",
-        "value": "Vibrant"
-      }
-    ],
-  }  
-  `
+        "value": "${backgroundColors[backgroundColorsIndex].name}"
+      }],
+    }  `
+
+  fileName = `${fileName}.svg`;
+  const metadataFileName = `${fileName}.json`;
+  const filePath = path.join('./avatar', fileName);
+  const metadataFilePath = path.join('./metadata', metadataFileName);
+
+  try {
+    await writeFilePromise(filePath, svgString);
+    await writeFilePromise(metadataFilePath, matadata);
+
+    console.log(`${fileName} has been created`);
+  } catch (err) {
+    console.error('Error writing file:', err);
+  }
+
+
   // return svgString;
 }
 
 
 async function generateFaces(total, batchSize) {
   let batchStart = 0;
-  
+
   while (batchStart < total) {
     const promises = [];
     for (let i = batchStart; i < Math.min(batchStart + batchSize, total); i++) {
@@ -413,7 +416,7 @@ async function generateFaces(total, batchSize) {
 }
 
 // Run the function with limited concurrency
-const totalFaces = 1000;
+const totalFaces = 100;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
