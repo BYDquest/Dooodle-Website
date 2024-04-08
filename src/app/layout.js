@@ -1,9 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Ugly Avatar",
-  description: "Ugly Avatar NFT",
-
+  title: "Scribble",
+  description: "A Scribble NFT Collection",
 };
 
 export default function RootLayout({ children }) {
