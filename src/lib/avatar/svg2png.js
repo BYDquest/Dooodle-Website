@@ -2,8 +2,8 @@ const fs = require('fs').promises;
 const path = require('path');
 const sharp = require('sharp');
 
-const svgDirectory = path.join(__dirname, 'avatar2');
-const outputDirectory = path.join(__dirname, 'avatar-png2');
+const svgDirectory = path.join(__dirname, 'avatar');
+const outputDirectory = path.join(__dirname, 'avatar-png');
 
 // Adjust based on your system's capabilities
 const CONCURRENCY_LIMIT = 200;
