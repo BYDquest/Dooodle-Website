@@ -361,7 +361,7 @@ async function generateFace(fileName) {
 
   fileName = `${fileName}.svg`;
 
-  const filePath = path.join('./avatar2', fileName);
+  const filePath = path.join('./avatar', fileName);
   try {
     await writeFilePromise(filePath, svgString);
     console.log(`${fileName} has been created`);
