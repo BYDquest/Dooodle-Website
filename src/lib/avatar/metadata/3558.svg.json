@@ -1,0 +1,23 @@
+{
+    "name": "Ugly Avatar",
+    "description": "A Naïve and Ugly Avatar Collection",
+    "image": "https://example.com/path/to/3599.svg",
+    "external_url": "https://www.byd.quest",
+    "attributes": [
+      {
+        "trait_type": "Avatar Type",
+        "value": "91864"
+      },
+      {
+        "trait_type": "Face",
+        "value": "Coral"
+      },
+      {
+        "trait_type": "Hair",
+        "value": "Vibrant"
+      }
+      {
+        "trait_type": "Background",
+        "value": "Powder Blue"
+      }],
+    }  

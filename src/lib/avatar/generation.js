@@ -420,12 +420,11 @@ async function generateFaces(total, batchSize) {
 }
 
 
-
 ensureDirectoryExists('avatar')
 ensureDirectoryExists('metadata')
 
 // Run the function with limited concurrency
-const totalFaces = 150;
+const totalFaces = 10000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 

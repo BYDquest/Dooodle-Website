@@ -1,90 +1,76 @@
 const sharp = require('sharp');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 
 // Ensures the output directory exists
-function ensureDirectoryExists(dirPath) {
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+async function ensureDirectoryExists(dirPath) {
+  try {
+    await fs.access(dirPath);
+  } catch (error) {
+    await fs.mkdir(dirPath, { recursive: true });
   }
 }
 
-// Function to combine SVG images into a single PNG image
-function combineSVGImages(imageDir, outputDir, gridWidth, outputImageWidth, outputImageHeight) {
-  ensureDirectoryExists(outputDir);
-
-  // Generate the list of image filenames
-  let imageFiles = fs.readdirSync(imageDir).filter(file => file.endsWith('.svg'));
-  const imagesPerCombined = gridWidth * gridWidth; // Calculate based on grid size
+// Function to process a batch of SVG images
+async function processBatch(batchFiles, imageDir, outputDir, batchNumber, gridWidth, outputImageWidth, outputImageHeight) {
   const combinedImageWidth = gridWidth * outputImageWidth;
   const combinedImageHeight = gridWidth * outputImageHeight;
 
-  // If there are fewer images than the grid can hold, calculate how many are needed to fill the grid
-  const fillerCount = imagesPerCombined - imageFiles.length % imagesPerCombined;
-  if (imageFiles.length < imagesPerCombined) {
-    imageFiles = [...imageFiles, ...Array(fillerCount).fill(null)]; // Fill with nulls to indicate blanks
+  const canvas = sharp({
+    create: {
+      width: combinedImageWidth,
+      height: combinedImageHeight,
+      channels: 4,
+      background: 'white',
+    },
+  });
+
+  const images = await Promise.all(batchFiles.map(async (file, index) => {
+    const x = (index % gridWidth) * outputImageWidth;
+    const y = Math.floor(index / gridWidth) * outputImageHeight;
+
+    if (file) {
+      const data = await sharp(path.join(imageDir, file))
+        .resize(outputImageWidth, outputImageHeight)
+        .toBuffer();
+      return { input: data, top: y, left: x };
+    } else {
+      return {
+        input: {
+          create: {
+            width: outputImageWidth,
+            height: outputImageHeight,
+            channels: 4,
+            background: { r: 0, g: 0, b: 0, alpha: 0 },
+          },
+        },
+        top: y,
+        left: x,
+      };
+    }
+  }));
+
+  await canvas.composite(images).toFile(path.join(outputDir, `combined_${batchNumber + 1}.png`));
+  console.log(`Combined image ${batchNumber + 1} created in ${outputDir} directory.`);
+}
+
+// Optimized function to combine SVG images with concurrency control
+async function combineSVGImages(imageDir, outputDir, gridWidth, outputImageWidth, outputImageHeight, concurrencyLimit = 4) {
+  await ensureDirectoryExists(outputDir);
+
+  const imageFiles = await fs.readdir(imageDir).then(files => files.filter(file => file.endsWith('.svg')));
+  const imagesPerCombined = gridWidth * gridWidth;
+
+  let batches = [];
+  for (let i = 0; i < imageFiles.length; i += imagesPerCombined) {
+    batches.push(imageFiles.slice(i, i + imagesPerCombined));
   }
 
-  // Process in batches of gridWidth*gridWidth
-  for (let n = 0; n < Math.ceil(imageFiles.length / imagesPerCombined); n++) {
-    const startIdx = n * imagesPerCombined;
-    const endIdx = startIdx + imagesPerCombined;
-    const batchFiles = imageFiles.slice(startIdx, endIdx);
-
-    // Create a canvas
-    const canvas = sharp({
-      create: {
-        width: combinedImageWidth,
-        height: combinedImageHeight,
-        channels: 4,
-        background: 'white'
-      }
-    });
-
-    const imagePromises = batchFiles.map((file, index) => {
-      const row = Math.floor(index / gridWidth);
-      const col = index % gridWidth;
-      const x = col * outputImageWidth;
-      const y = row * outputImageHeight;
-
-      if (file) {
-        // If there's an image, process and place it
-        return sharp(path.join(imageDir, file))
-          .resize(outputImageWidth, outputImageHeight)
-          .toBuffer()
-          .then(data => ({
-            input: data,
-            top: y,
-            left: x
-          }));
-      } else {
-        // For null (blank), create a transparent filler
-        return Promise.resolve({
-          input: {
-            create: {
-              width: outputImageWidth,
-              height: outputImageHeight,
-              channels: 4,
-              background: { r: 0, g: 0, b: 0, alpha: 0 }
-            }
-          },
-          top: y,
-          left: x
-        });
-      }
-    });
-
-    // Composite images onto the canvas
-    Promise.all(imagePromises).then(images => {
-      canvas.composite(images)
-        .toFile(path.join(outputDir, `combined_${n+1}.png`), (err, info) => {
-          if (err) throw err;
-          console.log(`Combined image ${n+1} created in ${outputDir} directory.`);
-        });
-    });
+  for (let i = 0; i < batches.length; i += concurrencyLimit) {
+    const concurrentBatches = batches.slice(i, i + concurrencyLimit);
+    await Promise.all(concurrentBatches.map((batchFiles, index) => processBatch(batchFiles, imageDir, outputDir, i + index, gridWidth, outputImageWidth, outputImageHeight)));
   }
 }
 
 // Example usage
-// Note: Adjust the parameters as needed
-combineSVGImages('avatar', 'combined-image', 10, 100, 100);
+combineSVGImages('avatar', 'combined-image', 10, 100, 100, 4).catch(console.error);
