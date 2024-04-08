@@ -388,8 +388,8 @@ async function generateFace(fileName) {
 
 
   metadata = `{
-    "name": "Scribble",
-    "description": "A Scribble NFT Collection",
+    "name": "GRF Avatar",
+    "description": "Get F**king Rich NFT Collection",
     "image": "https://example.com/path/to/${fileName}.svg",
     "external_url": "https://www.byd.quest",
     "attributes": [
