@@ -1,6 +1,6 @@
-const sharp = require('sharp');
 const fs = require('fs').promises;
 const path = require('path');
+const { parse, stringify } = require('svgson');
 
 // Ensures the output directory exists
 async function ensureDirectoryExists(dirPath) {
@@ -13,45 +13,44 @@ async function ensureDirectoryExists(dirPath) {
 
 // Function to process a batch of SVG images
 async function processBatch(batchFiles, imageDir, outputDir, batchNumber, gridWidth, outputImageWidth, outputImageHeight) {
-  const combinedImageWidth = gridWidth * outputImageWidth;
-  const combinedImageHeight = gridWidth * outputImageHeight;
-
-  const canvas = sharp({
-    create: {
-      width: combinedImageWidth,
-      height: combinedImageHeight,
-      channels: 4,
-      background: 'white',
+  let combinedSvg = {
+    name: "svg",
+    type: "element",
+    attributes: {
+      width: gridWidth * outputImageWidth,
+      height: gridWidth * outputImageHeight,
+      xmlns: "http://www.w3.org/2000/svg",
     },
-  });
+    children: [],
+  };
 
-  const images = await Promise.all(batchFiles.map(async (file, index) => {
-    const x = (index % gridWidth) * outputImageWidth;
-    const y = Math.floor(index / gridWidth) * outputImageHeight;
-
+  for (let index = 0; index < batchFiles.length; index++) {
+    const file = batchFiles[index];
     if (file) {
-      const data = await sharp(path.join(imageDir, file))
-        .resize(outputImageWidth, outputImageHeight)
-        .toBuffer();
-      return { input: data, top: y, left: x };
-    } else {
-      return {
-        input: {
-          create: {
-            width: outputImageWidth,
-            height: outputImageHeight,
-            channels: 4,
-            background: { r: 0, g: 0, b: 0, alpha: 0 },
-          },
-        },
-        top: y,
-        left: x,
-      };
-    }
-  }));
+      const filePath = path.join(imageDir, file);
+      const fileContent = await fs.readFile(filePath, 'utf8');
+      const svgJson = await parse(fileContent);
 
-  await canvas.composite(images).toFile(path.join(outputDir, `combined_${batchNumber + 1}.png`));
-  console.log(`Combined image ${batchNumber + 1} created in ${outputDir} directory.`);
+      const x = (index % gridWidth) * outputImageWidth;
+      const y = Math.floor(index / gridWidth) * outputImageHeight;
+
+      // Wrap the content in a group with a transform
+      const group = {
+        name: "g",
+        type: "element",
+        attributes: {
+          transform: `translate(${x}, ${y})`
+        },
+        children: [svgJson],
+      };
+
+      combinedSvg.children.push(group);
+    }
+  }
+
+  const combinedSvgString = stringify(combinedSvg);
+  await fs.writeFile(path.join(outputDir, `${batchNumber}.svg`), combinedSvgString);
+  console.log(`Combined SVG ${batchNumber + 1} created in ${outputDir} directory.`);
 }
 
 // Optimized function to combine SVG images with concurrency control
@@ -73,4 +72,4 @@ async function combineSVGImages(imageDir, outputDir, gridWidth, outputImageWidth
 }
 
 // Example usage
-combineSVGImages('avatar', 'combined-image', 10, 100, 100, 4).catch(console.error);
+combineSVGImages('avatar', 'combined-image', 10, 500, 500, 4).catch(console.error);

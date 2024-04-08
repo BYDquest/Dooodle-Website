@@ -2,12 +2,34 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const writeFilePromise = util.promisify(fs.writeFile);
+const { optimize } = require('svgo');
 
 
 const faceShape = require("./face_shape.js");
 const eyeShape = require("./eye_shape.js");
 const hairLines = require("./hair_lines.js");
 const mouthShape = require("./mouth_shape.js");
+
+async function optimizeSvg(svgString) {
+  // Adjusted to be an async function if needed
+  const options = {
+    multipass: true,
+    // Additional options specified here
+  };
+
+  try {
+    // Assuming optimize might be asynchronous or you're preparing for async operations
+    const result = await Promise.resolve(optimize(svgString, options));
+    if (result.error) {
+      throw new Error(`Error optimizing the SVG: ${result.error}`);
+    }
+    return result.data; // Return the optimized SVG string
+  } catch (error) {
+    throw error; // Allows error to be caught in the calling context
+  }
+}
+
+
 
 function ensureDirectoryExists(dirPath) {
   if (!fs.existsSync(dirPath)) {
@@ -365,7 +387,7 @@ async function generateFace(fileName) {
   </svg>`;
 
 
-  matadata = `{
+  metadata = `{
     "name": "Ugly Avatar",
     "description": "A Naïve and Ugly Avatar Collection",
     "image": "https://example.com/path/to/${fileName}.svg",
@@ -382,28 +404,31 @@ async function generateFace(fileName) {
       {
         "trait_type": "Hair",
         "value": "Vibrant"
-      }
+      },
       {
         "trait_type": "Background",
         "value": "${backgroundColors[backgroundColorsIndex].name}"
-      }],
-    }  `
+      }]
+}`
 
-  fileName = `${fileName}.svg`;
+
+ metadata = JSON.stringify(JSON.parse(metadata));
+
+  const svgFileName = `${fileName}.svg`;
   const metadataFileName = `${fileName}.json`;
-  const filePath = path.join('./avatar', fileName);
+  const filePath = path.join('./avatar', svgFileName);
   const metadataFilePath = path.join('./metadata', metadataFileName);
 
   try {
+    svgString = await optimizeSvg(svgString); 
     await writeFilePromise(filePath, svgString);
-    await writeFilePromise(metadataFilePath, matadata);
+    await writeFilePromise(metadataFilePath, metadata);
 
     console.log(`${fileName} has been created`);
   } catch (err) {
     console.error('Error writing file:', err);
   }
 
-  // return svgString;
 }
 
 
@@ -426,7 +451,6 @@ ensureDirectoryExists('metadata')
 // Run the function with limited concurrency
 const totalFaces = 10000;
 const batchSize = 200; // Adjust based on your system's capabilities
-
 
 generateFaces(totalFaces, batchSize).then(() => {
   console.log('All files have been generated and saved.');
