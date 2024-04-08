@@ -388,13 +388,13 @@ async function generateFace(fileName) {
 
 
   metadata = `{
-    "name": "GRF Avatar",
-    "description": "Get F**king Rich NFT Collection",
+    "name": "RRR Doodlers",
+    "description": " RRR Doodlers, an exclusive NFT collection that perfectly complements the Get Rich Rich Rich Token ($GRRR) ecosystem. These unique, digital assets feature doodle-style avatars that embody the spirit of financial success and abundance.",
     "image": "https://example.com/path/to/${fileName}.svg",
-    "external_url": "https://www.byd.quest",
+    "external_url": "https://www.example.com",
     "attributes": [
       {
-        "trait_type": "Avatar Type",
+        "trait_type": "RRR Value",
         "value": "${svgString.length}"
       },
       {
@@ -403,7 +403,7 @@ async function generateFace(fileName) {
       },
       {
         "trait_type": "Hair",
-        "value": "Vibrant"
+        "value": "${hairs.length}"
       },
       {
         "trait_type": "Background",
@@ -449,7 +449,7 @@ ensureDirectoryExists('avatar')
 ensureDirectoryExists('metadata')
 
 // Run the function with limited concurrency
-const totalFaces = 100;
+const totalFaces = 100000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
