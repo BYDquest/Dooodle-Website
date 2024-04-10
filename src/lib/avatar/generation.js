@@ -61,6 +61,69 @@ function convertHairsArrayToFixedFloat(arr) {
   );
 }
 
+function randomRGB() {
+  // Generate random values for Red, Green, and Blue
+  const r = Math.floor(Math.random() * 256); // Random between 0-255
+  const g = Math.floor(Math.random() * 256); // Random between 0-255
+  const b = Math.floor(Math.random() * 256); // Random between 0-255
+
+  // Return the RGB value as a string
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+
+function hslToRgb(h, s, l) {
+  let r, g, b;
+
+  if (s == 0) {
+      r = g = b = l; // achromatic
+  } else {
+      const hue2rgb = (p, q, t) => {
+          if (t < 0) t += 1;
+          if (t > 1) t -= 1;
+          if (t < 1 / 6) return p + (q - p) * 6 * t;
+          if (t < 1 / 2) return q;
+          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+          return p;
+      };
+
+      const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      const p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1 / 3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1 / 3);
+  }
+
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function generateHarmoniousColors() {
+  const baseHue = Math.random(); // Random base hue
+  const saturation = 0.75; // Fixed saturation for vivid colors
+  const lightnessForFace = 0.5; // Mid lightness for the face color
+  const lightnessForBackground = lightnessForFace > 0.5 ? 0.2 : 0.8; // Contrasting lightness for background
+  const lightnessForHair = lightnessForFace < 0.5 ? 0.7 : 0.3; // Ensure hair color contrasts with face
+
+  const complementaryHue = (baseHue + 0.5) % 1; // Complementary color for vibrant contrast
+  const triadicHue1 = (baseHue + 1 / 3) % 1; // First triadic color
+
+  // Convert HSL to RGB
+  const faceColorRGB = hslToRgb(baseHue, saturation, lightnessForFace);
+  const backgroundColorRGB = hslToRgb(complementaryHue, saturation, lightnessForBackground);
+  const hairColorRGB = hslToRgb(triadicHue1, saturation, lightnessForHair);
+
+  // Format RGB values to CSS-friendly strings
+  const faceColor = `rgb(${faceColorRGB.join(', ')})`;
+  const backgroundColor = `rgb(${backgroundColorRGB.join(', ')})`;
+  const hairColor0 = `rgb(${hairColorRGB.join(', ')})`;
+
+
+  return { faceColor, backgroundColor, hairColor0 };
+}
+
+
+
+
 async function generateFace(fileName) {
   const faceScale = 1.8; // face scale
   let computedFacePoints = []; // the polygon points for face countour
@@ -94,86 +157,6 @@ async function generateFace(fileName) {
 
   let hairColor = "black";
   let dyeColorOffset = "50%";
-
-  const faceColors = [
-    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
-    { name: "Beige", rgb: "rgb(245, 245, 220)" },
-    { name: "Wheat", rgb: "rgb(245, 222, 179)" },
-    { name: "Tan", rgb: "rgb(210, 180, 140)" },
-    { name: "Almond", rgb: "rgb(255, 235, 205)" },
-    { name: "Peach", rgb: "rgb(255, 218, 185)" },
-    { name: "Apricot", rgb: "rgb(251, 206, 177)" },
-    { name: "Golden", rgb: "rgb(255, 215, 0)" },
-    { name: "Olive", rgb: "rgb(128, 128, 0)" },
-    { name: "Sienna", rgb: "rgb(160, 82, 45)" },
-    { name: "Chestnut", rgb: "rgb(205, 92, 92)" },
-    { name: "Chocolate", rgb: "rgb(210, 105, 30)" },
-    { name: "Bronze", rgb: "rgb(205, 127, 50)" },
-    { name: "Mahogany", rgb: "rgb(192, 64, 0)" },
-    { name: "Coral", rgb: "rgb(255, 127, 80)" },
-    { name: "Terracotta", rgb: "rgb(226, 114, 91)" },
-    { name: "Crimson", rgb: "rgb(220, 20, 60)" },
-    { name: "Magenta", rgb: "rgb(255, 0, 255)" },
-    { name: "Lilac", rgb: "rgb(200, 162, 200)" },
-    { name: "Plum", rgb: "rgb(221, 160, 221)" }
-  ];
-
-  const backgroundColors = [
-    { name: "Ivory", rgb: "rgb(255, 255, 240)" },
-    { name: "Beige", rgb: "rgb(245, 245, 220)" },
-    { name: "Cream", rgb: "rgb(255, 253, 208)" },
-    { name: "Linen", rgb: "rgb(250, 240, 230)" },
-    { name: "Vanilla", rgb: "rgb(243, 229, 171)" },
-    { name: "Soft Yellow", rgb: "rgb(255, 255, 224)" },
-    { name: "Pale Green", rgb: "rgb(152, 251, 152)" },
-    { name: "Mint", rgb: "rgb(245, 255, 250)" },
-    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
-    { name: "Periwinkle", rgb: "rgb(204, 204, 255)" },
-    { name: "Powder Blue", rgb: "rgb(176, 224, 230)" },
-    { name: "Light Coral", rgb: "rgb(240, 128, 128)" },
-    { name: "Soft Pink", rgb: "rgb(255, 228, 225)" },
-    { name: "Mauve", rgb: "rgb(224, 176, 255)" },
-    { name: "Taupe", rgb: "rgb(188, 143, 143)" },
-    { name: "Khaki", rgb: "rgb(195, 176, 145)" },
-    { name: "Sepia", rgb: "rgb(112, 66, 20)" },
-    { name: "Olive Green", rgb: "rgb(85, 107, 47)" },
-    { name: "Steel Blue", rgb: "rgb(70, 130, 180)" },
-    { name: "Charcoal", rgb: "rgb(54, 69, 79)" }
-  ];
-
-  const hairColors = [
-    { name: "Black", rgb: "rgb(0, 0, 0)" },
-    { name: "Dark Brown", rgb: "rgb(44, 34, 43)" },
-    { name: "Medium Brown", rgb: "rgb(80, 68, 68)" },
-    { name: "Light Brown", rgb: "rgb(167, 133, 106)" },
-    { name: "Honey Blond", rgb: "rgb(220, 208, 186)" },
-    { name: "Golden Blond", rgb: "rgb(255, 236, 139)" },
-    { name: "Platinum Blond", rgb: "rgb(233, 236, 239)" },
-    { name: "Ash Blond", rgb: "rgb(216, 216, 216)" },
-    { name: "Ginger", rgb: "rgb(178, 93, 37)" },
-    { name: "Auburn", rgb: "rgb(145, 85, 61)" },
-    { name: "Burgundy", rgb: "rgb(128, 0, 32)" },
-    { name: "Chestnut", rgb: "rgb(149, 69, 53)" },
-    { name: "Copper", rgb: "rgb(184, 115, 51)" },
-    { name: "Mahogany", rgb: "rgb(192, 64, 0)" },
-    { name: "Jet Black", rgb: "rgb(10, 10, 10)" },
-    { name: "Silver", rgb: "rgb(192, 192, 192)" },
-    { name: "Slate Gray", rgb: "rgb(112, 128, 144)" },
-    { name: "Steel Blue", rgb: "rgb(70, 130, 180)" },
-    { name: "Periwinkle", rgb: "rgb(204, 204, 255)" },
-    { name: "Lavender", rgb: "rgb(230, 230, 250)" },
-    { name: "Plum", rgb: "rgb(221, 160, 221)" },
-    { name: "Indigo", rgb: "rgb(75, 0, 130)" },
-    { name: "Forest Green", rgb: "rgb(34, 139, 34)" },
-    { name: "Olive Green", rgb: "rgb(85, 107, 47)" },
-    { name: "Lime Green", rgb: "rgb(50, 205, 50)" },
-    { name: "Coral", rgb: "rgb(255, 127, 80)" },
-    { name: "Peach", rgb: "rgb(255, 218, 185)" },
-    { name: "Crimson", rgb: "rgb(220, 20, 60)" },
-    { name: "Magenta", rgb: "rgb(255, 0, 255)" },
-    { name: "Turquoise", rgb: "rgb(64, 224, 208)" }
-  ];
-
 
   const faceResults = faceShape.generateFaceCountourPoints();
   computedFacePoints.push(...faceResults.face);
@@ -262,10 +245,11 @@ async function generateFace(fileName) {
   leftNoseCenterY = rightNoseCenterY + randomFromInterval(-faceHeight / 30, faceHeight / 20);
 
 
+  const { faceColor, backgroundColor, hairColor0 } = generateHarmoniousColors()
+ 
+
   if (Math.random() > 0.1) {
-    // use natural hair color
-    const hairColorsIndex = Math.floor(Math.random() * hairColors.length)
-    hairColor = hairColors[hairColorsIndex].rgb;
+    hairColor = hairColor0;
   } else {
     hairColor = "url(#rainbowGradient)";
     dyeColorOffset = randomFromInterval(0, 100) + "%";
@@ -336,8 +320,6 @@ async function generateFace(fileName) {
   }
 
   const noseMarkup = generateNoseMarkup();
-  const backgroundColorsIndex = Math.floor(Math.random() * backgroundColors.length)
-  const faceColorsIndex = Math.floor(Math.random() * faceColors.length)
 
   /////////////////////////////////////
 
@@ -354,13 +336,13 @@ async function generateFace(fileName) {
         <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
       </filter>
       <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color: ${hairColors[Math.floor(Math.random().toFixed(3) * 10)]}; stop-opacity: 1" />
-        <stop offset="${dyeColorOffset}" style="stop-color: ${hairColors[Math.floor(Math.random().toFixed(3) * hairColors.length)]}; stop-opacity: 1" />
-        <stop offset="100%" style="stop-color: ${hairColors[Math.floor(Math.random().toFixed(3) * hairColors.length)]}; stop-opacity: 1" />
+        <stop offset="0%" style="stop-color: ${randomRGB()}; stop-opacity: 1" />
+        <stop offset="${dyeColorOffset}" style="stop-color: ${randomRGB()}; stop-opacity: 1" />
+        <stop offset="100%" style="stop-color: ${randomRGB()}; stop-opacity: 1" />
       </linearGradient>
     </defs>
-    <rect x="-100" y="-100" width="100%" height="100%" fill="${backgroundColors[backgroundColorsIndex].rgb}" />
-    <polyline id="faceContour" points="${computedFacePoints.join(' ')}" fill="${faceColors[faceColorsIndex].rgb}" stroke="black" stroke-width="${3.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
+    <rect x="-100" y="-100" width="100%" height="100%" fill="${backgroundColor}" />
+    <polyline id="faceContour" points="${computedFacePoints.join(' ')}" fill="${faceColor}" stroke="black" stroke-width="${3.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
     <g transform="translate(${center[0] + distanceBetweenEyes + rightEyeOffsetX} ${-(-center[1] + eyeHeightOffset + rightEyeOffsetY)})">
       <polyline id="rightCountour" points="${eyeRightCountour.join(' ')}" fill="white" stroke="white" stroke-width="${0.0 / faceScale}" stroke-linejoin="round" filter="url(#fuzzy)" />
     </g>
@@ -399,15 +381,15 @@ async function generateFace(fileName) {
       },
       {
         "trait_type": "Face",
-        "value": "${faceColors[faceColorsIndex].name}"
+        "value": ""
       },
       {
         "trait_type": "Hair",
-        "value": "${hairs.length}"
+        "value": ""
       },
       {
         "trait_type": "Background",
-        "value": "${backgroundColors[backgroundColorsIndex].name}"
+        "value": ""
       }]
 }`
 
@@ -449,7 +431,7 @@ ensureDirectoryExists('avatar')
 ensureDirectoryExists('metadata')
 
 // Run the function with limited concurrency
-const totalFaces = 100000;
+const totalFaces = 1000;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
