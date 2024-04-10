@@ -1,9 +1,9 @@
 import "./globals.css";
 
 export const metadata = {
-  title: " Doooodle NFT | $DOOO Token ",
+  title: " Dooodle NFT | $DOOO Token ",
   description: ` $DOOO is a cryptocurrency based on Doooodle NFT.
-  "Doooodle," an exclusive NFT collection. These unique, digital assets feature doodle-style avatars that embody the spirit of Just DOOOO it.
+  "Dooodle," an exclusive NFT collection. These unique, digital assets feature doodle-style avatars that embody the spirit of Just DOOOO it.
   `,
 };
 
