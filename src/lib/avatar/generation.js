@@ -103,25 +103,25 @@ function generateHarmoniousColors() {
   const lightnessForFace = 0.5; // Mid lightness for the face color
   const lightnessForBackground = lightnessForFace > 0.5 ? 0.2 : 0.8; // Contrasting lightness for background
   const lightnessForHair = lightnessForFace < 0.5 ? 0.7 : 0.3; // Ensure hair color contrasts with face
+  const lightnessForMouth = lightnessForFace > 0.5 ? 0.4 : 0.6; // Adjust mouth color for visibility
 
-  const complementaryHue = (baseHue + 0.5) % 1; // Complementary color for vibrant contrast
-  const triadicHue1 = (baseHue + 1 / 3) % 1; // First triadic color
+  const complementaryHue = (baseHue + 0.5) % 1; // Complementary color
+  const triadicHue1 = (baseHue + 1 / 3) % 1; // Triadic color for hair
 
   // Convert HSL to RGB
   const faceColorRGB = hslToRgb(baseHue, saturation, lightnessForFace);
   const backgroundColorRGB = hslToRgb(complementaryHue, saturation, lightnessForBackground);
   const hairColorRGB = hslToRgb(triadicHue1, saturation, lightnessForHair);
+  const mouthColorRGB = hslToRgb(baseHue, saturation - 0.25, lightnessForMouth); // Slightly desaturate for natural tone
 
   // Format RGB values to CSS-friendly strings
   const faceColor = `rgb(${faceColorRGB.join(', ')})`;
   const backgroundColor = `rgb(${backgroundColorRGB.join(', ')})`;
   const hairColor0 = `rgb(${hairColorRGB.join(', ')})`;
+  const mouthColor = `rgb(${mouthColorRGB.join(', ')})`;
 
-
-  return { faceColor, backgroundColor, hairColor0 };
+  return { faceColor, backgroundColor, hairColor0, mouthColor };
 }
-
-
 
 
 async function generateFace(fileName) {
@@ -245,7 +245,7 @@ async function generateFace(fileName) {
   leftNoseCenterY = rightNoseCenterY + randomFromInterval(-faceHeight / 30, faceHeight / 20);
 
 
-  const { faceColor, backgroundColor, hairColor0 } = generateHarmoniousColors()
+  const { faceColor, backgroundColor, hairColor0 , mouthColor} = generateHarmoniousColors()
  
 
   if (Math.random() > 0.1) {
@@ -364,7 +364,7 @@ async function generateFace(fileName) {
     </g>
     ${noseMarkup}
     <g id="mouth">
-      <polyline points="${mouthPoints.join(' ')}" fill="rgb(215,127,140)" stroke="black" stroke-width="3" stroke-linejoin="round" filter="url(#fuzzy)" />
+      <polyline points="${mouthPoints.join(' ')}" fill="${mouthColor}" stroke="black" stroke-width="3" stroke-linejoin="round" filter="url(#fuzzy)" />
     </g>
   </svg>`;
 
