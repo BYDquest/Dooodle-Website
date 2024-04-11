@@ -431,7 +431,7 @@ ensureDirectoryExists('avatar')
 ensureDirectoryExists('metadata')
 
 // Run the function with limited concurrency
-const totalFaces = 1000;
+const totalFaces = 100;
 const batchSize = 200; // Adjust based on your system's capabilities
 
 generateFaces(totalFaces, batchSize).then(() => {
